@@ -19,28 +19,28 @@ test_requirements = [
 ]
 
 setup(
-    name='simple_calculator',
+    name='thai_pronunciation',
     version='0.1.0',
     description="Python Boilerplate contains all the boilerplate you need to create a Python package.",
     long_description=readme + '\n\n',
-    author="Thada Wangthammang",
-    author_email='mildronize@gmail.com',
-    url='https://github.com/mildronize/simple-calculator',
+    author="Nattapon Jutamas",
+    author_email='nattaponj@outlook.com',
+    url='https://github.com/bookj/SplitComponentOfWord',
     packages=[
-        'simple_calculator',
+        'thai_pronunciation',
     ],
-    package_dir={'simple_calculator':
-                 'simple_calculator'},
+    package_dir={'thai_pronunciation':
+                 'thai_pronunciation'},
     entry_points={
         'console_scripts': [
-            'simple_calculator=simple_calculator.cli:main'
+            'thai_pronunciation=thai_pronunciation.cli:main'
         ]
     },
     include_package_data=True,
     install_requires=requirements,
     license="MIT license",
     zip_safe=False,
-    keywords='simple_calculator',
+    keywords='thai_pronunciation',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',

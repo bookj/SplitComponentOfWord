@@ -6,7 +6,7 @@ import click
 def main(args=None):
     """Console script for python_boilerplate"""
     click.echo("Replace this message by putting your code into "
-                "simple_calculator.cli.main")
+                "thai_pronunciation.cli.main")
     click.echo("See click documentation at http://click.pocoo.org/")
 
 
