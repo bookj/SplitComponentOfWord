@@ -1,26 +1,26 @@
 import re
 '''
-middleChar = ['ก', 'จ', 'ฎ', 'ฏ', 'ด', 'ต', 'บ', 'ป', 'อ']
-highChar = ['ข', 'ฃ', 'ฉ', 'ฐ', 'ถ', 'ผ', 'ฝ', 'ศ', 'ษ', 'ส', 'ห']
+middle_char = ['ก', 'จ', 'ฎ', 'ฏ', 'ด', 'ต', 'บ', 'ป', 'อ']
+high_char = ['ข', 'ฃ', 'ฉ', 'ฐ', 'ถ', 'ผ', 'ฝ', 'ศ', 'ษ', 'ส', 'ห']
 '''
-class SplitComponentOfWord:
+class split_component_of_word:
     def __init__(self, word):
         self.word = word
-        self.vowelsInUnicode = r"[\u0E30-\u0E39|\u0E40-\u0E45]"
-        self.consonantsInUnicode = r"[ก-ร|ล|ว-ฮ]+"
-        self.toneMarks = ['่', '้', '๊', '๋']
-        self.vowelsBeforeA = ['เ[ก-ฮ]+ียะ', 'เ[ก-ฮ]+ือะ', 'เ[ก-ฮ]+ีย', 'เ[ก-ฮ]+ือ', \
+        self.vowels_in_unicode = r"[\u0E30-\u0E39|\u0E40-\u0E45]"
+        self.consonants_in_unicode = r"[ก-ร|ล|ว-ฮ]+"
+        self.tone_marks = ['่', '้', '๊', '๋']
+        self.vowels_before_A = ['เ[ก-ฮ]+ียะ', 'เ[ก-ฮ]+ือะ', 'เ[ก-ฮ]+ีย', 'เ[ก-ฮ]+ือ', \
                          'เ[ก-ฮ]+าะ', 'เ[ก-ฮ]+อะ' , 'เ[ก-ฮ]+อ' , 'เ[ก-ฮ]+า', \
                          'เ[ก-ฮ]+ะ', 'เ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว เ-
-        self.vowelsBeforeAe = ['แ[ก-ฮ]+ะ', 'แ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว แ-
-        self.vowelsBeforeO = ['โ[ก-ฮ]+ะ', 'โ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว โ-
-        self.vowelsBeforeUa = ['[ก-ฮ]+ัวะ', '[ก-ฮ]+ัว', '[ก-ฮ]+ั'] # สระที่ขึ้นต้นด้วยตัว -ัว
+        self.vowels_before_Ae = ['แ[ก-ฮ]+ะ', 'แ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว แ-
+        self.vowels_before_O = ['โ[ก-ฮ]+ะ', 'โ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว โ-
+        self.vowels_before_Ua = ['[ก-ฮ]+ัวะ', '[ก-ฮ]+ัว', '[ก-ฮ]+ั'] # สระที่ขึ้นต้นด้วยตัว -ัว
 
 
-    def findToneMark(self):
-        for toneMark in self.toneMarks:
-            if re.search(toneMark, self.word):
-                return toneMark
+    def find_tone_mark(self):
+        for tone_mark in self.tone_marks:
+            if re.search(tone_mark, self.word):
+                return tone_mark
         return None
 
     def diphthong(self):
@@ -30,33 +30,34 @@ class SplitComponentOfWord:
             return match.group()
         return match
 
-    def consonantsBeforeH(self): # ห นำ
+    def consonants_before_H(self): # ห นำ
         regex = r"ห[ก-ฮ]"
         match = re.search(regex, self.word)
         if match is not None:
             return match.group()
         return match
 
-    def consonantsBeforeOY(self): # อย
+    def consonants_before_OY(self): # อย
         match = re.search('อย', self.word)
         if match is not None:
             return match.group()
         return match
 
-    def findFirstConsonant(self):
+    def find_first_consonant(self):
         if self.diphthong() is not None:
             return self.diphthong()
-        elif self.consonantsBeforeH() is not None:
-            return self.consonantsBeforeH()
-        elif self.consonantsBeforeOY() is not None:
-            return self.consonantsBeforeOY()
+        elif self.consonants_before_H() is not None:
+            return self.consonants_before_H()
+        elif self.consonants_before_OY() is not None:
+            return self.consonants_before_OY()
         else:
-            match = re.search(self.consonantsInUnicode, self.word)
+            match = re.search(self.consonants_in_unicode, self.word)
             return match.group()
 
-    def findVowel(self):
-        match = re.search(vowelsInUnicode, self.word)
+    def find_vowel(self):
+        match = re.search(self.vowels_in_unicode, self.word)
         if match is not None:
+            del_tone_mark = self.word.replace(self.findtone_mark, '')
             if match.group() == 'เ':
                 for vowel in self.vowelsBeforeA :
                     if re.search(vowel, self.word):
@@ -79,22 +80,22 @@ class SplitComponentOfWord:
             return None
 
     def findFinalConsonant(self): # spelling
-        if findToneMark(self.word) is not None:
-            delToneMark = re.sub(findToneMark(self.word), '', self.word)
+        if self.findtone_mark(self.word) is not None:
+            deltone_mark = re.sub(findtone_mark(self.word), '', self.word)
         else:
-            delToneMark = self.word
-        delFirstConsonant = re.sub(findFirstConsonant(delToneMark), '', delToneMark)
-        finalConsonant = re.sub(findVowel(self.word), '', delFirstConsonant)
+            deltone_mark = self.word
+        delFirstConsonant = re.sub(find_first_consonant(deltone_mark), '', deltone_mark)
+        finalConsonant = re.sub(find_vowel(self.word), '', delFirstConsonant)
         if finalConsonant == '' :
             return None
         return finalConsonant
 
 '''
 word = input("ป้อนคำ 1 คำ : ")
-print(findFirstConsonant(word))
-print(findVowel(word))
+print(find_first_consonant(word))
+print(find_vowel(word))
 print(findFinalConsonant(word))
-print(findToneMark(word))
+print(findtone_mark(word))
 '''
 
 '''

@@ -50,28 +50,28 @@ class SplitFirstConsonantTest(unittest.TestCase):
 class SplitVowelTest(unittest.TestCase):
 
     def split_vowel_1_test(self):
-        assert SplitComponentOfWord('เมีย').findVowel() == 'เีย'
+        assert SplitComponentOfWord('เมีย').find_vowel() == 'เีย'
 
     def split_vowel_2_test(self):
-        assert SplitComponentOfWord('เกลี้ยง').findVowel() == 'เีย'
+        assert SplitComponentOfWord('เกลี้ยง').find_vowel() == 'เีย'
 
     def split_vowel_3_test(self):
-        assert SplitComponentOfWord('โต๊ะ').findVowel() == 'โะ'
+        assert SplitComponentOfWord('โต๊ะ').find_vowel() == 'โะ'
 
     def split_vowel_4_test(self):
-        assert SplitComponentOfWord('เกาะ').findVowel() == 'เาะ'
+        assert SplitComponentOfWord('เกาะ').find_vowel() == 'เาะ'
 
     def split_vowel_5_test(self):
-        assert SplitComponentOfWord('กลัว').findVowel() == 'ัว'
+        assert SplitComponentOfWord('กลัว').find_vowel() == 'ัว'
 
     def split_vowel_6_test(self):
-        assert SplitComponentOfWord('ไฟ').findVowel() == 'ไ'
+        assert SplitComponentOfWord('ไฟ').find_vowel() == 'ไ'
 
     '''
     def split_vowel_0_test(self):
-        assert SplitComponentOfWord('').findVowel() == ''
+        assert SplitComponentOfWord('').find_vowel() == ''
     '''
-
+'''
 class SplitFinalConsonantTest(unittest.TestCase):
 
     def split_final_consonant_1_test(self):
@@ -89,7 +89,6 @@ class SplitFinalConsonantTest(unittest.TestCase):
     def split_final_consonant_5_test(self):
         assert SplitComponentOfWord('คว้าง').findFinalConsonant() == 'ง'
 
-    '''
     def split_final_consonant_5_test(self):
         assert SplitComponentOfWord('').findFinalConsonant() == ''
-    '''
+'''
