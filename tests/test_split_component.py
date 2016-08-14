@@ -46,39 +46,50 @@ class SplitFirstConsonantTest(unittest.TestCase):
     def split_first_consonant_0_test(self):
         assert SplitComponentOfWord('').findFirstConsonant() == ''
     '''
-    
-'''
+
 class SplitVowelTest(unittest.TestCase):
 
     def split_vowel_1_test(self):
-        assert SplitComponentOfWord('').findFirstConsonant() == ''
+        assert SplitComponentOfWord('เมีย').findVowel() == 'เีย'
 
     def split_vowel_2_test(self):
-        assert Calculator("1+1").split_by_plus() == ['1','1']
+        assert SplitComponentOfWord('เกลี้ยง').findVowel() == 'เีย'
 
     def split_vowel_3_test(self):
-        assert Calculator("1+1").split_by_plus() == ['1','1']
+        assert SplitComponentOfWord('โต๊ะ').findVowel() == 'โะ'
 
     def split_vowel_4_test(self):
-        assert Calculator("1+1").split_by_plus() == ['1','1']
+        assert SplitComponentOfWord('เกาะ').findVowel() == 'เาะ'
 
     def split_vowel_5_test(self):
-        assert Calculator("1+1").split_by_plus() == ['1','1']
+        assert SplitComponentOfWord('กลัว').findVowel() == 'ัว'
+
+    def split_vowel_6_test(self):
+        assert SplitComponentOfWord('ไฟ').findVowel() == 'ไ'
+
+    '''
+    def split_vowel_0_test(self):
+        assert SplitComponentOfWord('').findVowel() == ''
+    '''
 
 class SplitFinalConsonantTest(unittest.TestCase):
 
     def split_final_consonant_1_test(self):
-        assert Calculator("1+1").split_by_plus() == ['1','1']
+        assert SplitComponentOfWord('เกลี้ยง').findFinalConsonant() == 'ง'
 
     def split_final_consonant_2_test(self):
-        assert Calculator("1+1").split_by_plus() == ['1','1']
+        assert SplitComponentOfWord('หมา').findFinalConsonant() == None
 
     def split_final_consonant_3_test(self):
-        assert Calculator("1+1").split_by_plus() == ['1','1']
+        assert SplitComponentOfWord('ปลั๊ก').findFinalConsonant() == 'ก'
 
     def split_final_consonant_4_test(self):
-        assert Calculator("1+1").split_by_plus() == ['1','1']
+        assert SplitComponentOfWord('แขวน').findFinalConsonant() == 'น'
 
     def split_final_consonant_5_test(self):
-        assert Calculator("1+1").split_by_plus() == ['1','1']
-'''
+        assert SplitComponentOfWord('คว้าง').findFinalConsonant() == 'ง'
+
+    '''
+    def split_final_consonant_5_test(self):
+        assert SplitComponentOfWord('').findFinalConsonant() == ''
+    '''
