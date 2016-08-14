@@ -9,6 +9,13 @@ class SplitComponentOfWord:
         self.vowelsInUnicode = r"[\u0E30-\u0E39|\u0E40-\u0E45]"
         self.consonantsInUnicode = r"[ก-ร|ล|ว-ฮ]+"
         self.toneMarks = ['่', '้', '๊', '๋']
+        self.vowelsBeforeA = ['เ[ก-ฮ]+ียะ', 'เ[ก-ฮ]+ือะ', 'เ[ก-ฮ]+ีย', 'เ[ก-ฮ]+ือ', \
+                         'เ[ก-ฮ]+าะ', 'เ[ก-ฮ]+อะ' , 'เ[ก-ฮ]+อ' , 'เ[ก-ฮ]+า', \
+                         'เ[ก-ฮ]+ะ', 'เ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว เ-
+        self.vowelsBeforeAe = ['แ[ก-ฮ]+ะ', 'แ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว แ-
+        self.vowelsBeforeO = ['โ[ก-ฮ]+ะ', 'โ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว โ-
+        self.vowelsBeforeUa = ['[ก-ฮ]+ัวะ', '[ก-ฮ]+ัว', '[ก-ฮ]+ั'] # สระที่ขึ้นต้นด้วยตัว -ัว
+
 
     def findToneMark(self):
         for toneMark in self.toneMarks:
@@ -37,22 +44,15 @@ class SplitComponentOfWord:
         return match
 
     def findFirstConsonant(self):
-        if diphthong(self.word) is not None:
-            return diphthong(self.word)
-        elif consonantsBeforeH(self.word) is not None:
-            return consonantsBeforeH(self.word)
-        elif consonantsBeforeOY(self.word) is not None:
-            return consonantsBeforeOY(self.word)
+        if self.diphthong() is not None:
+            return self.diphthong()
+        elif self.consonantsBeforeH() is not None:
+            return self.consonantsBeforeH()
+        elif self.consonantsBeforeOY() is not None:
+            return self.consonantsBeforeOY()
         else:
-            match = re.search(consonantsInUnicode, word)
+            match = re.search(self.consonantsInUnicode, self.word)
             return match.group()
-
-    self.vowelsBeforeA = ['เ[ก-ฮ]+ียะ', 'เ[ก-ฮ]+ือะ', 'เ[ก-ฮ]+ีย', 'เ[ก-ฮ]+ือ', \
-                     'เ[ก-ฮ]+าะ', 'เ[ก-ฮ]+อะ' , 'เ[ก-ฮ]+อ' , 'เ[ก-ฮ]+า', \
-                     'เ[ก-ฮ]+ะ', 'เ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว เ-
-    self.vowelsBeforeAe = ['แ[ก-ฮ]+ะ', 'แ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว แ-
-    self.vowelsBeforeO = ['โ[ก-ฮ]+ะ', 'โ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว โ-
-    self.vowelsBeforeUa = ['[ก-ฮ]+ัวะ', '[ก-ฮ]+ัว', '[ก-ฮ]+ั'] # สระที่ขึ้นต้นด้วยตัว -ัว
 
     def findVowel(self):
         match = re.search(vowelsInUnicode, self.word)
