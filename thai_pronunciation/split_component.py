@@ -15,7 +15,7 @@ class split_component_of_word:
         self.vowels_before_Ae = ['แ[ก-ฮ]+ะ', 'แ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว แ-
         self.vowels_before_O = ['โ[ก-ฮ]+ะ', 'โ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว โ-
         self.vowels_before_Ua = ['[ก-ฮ]+ัวะ', '[ก-ฮ]+ัว', '[ก-ฮ]+ั'] # สระที่ขึ้นต้นด้วยตัว -ัว
-
+        # self.del_tone_mark = ''
 
     def find_tone_mark(self):
         for tone_mark in self.tone_marks:
@@ -23,7 +23,7 @@ class split_component_of_word:
                 return tone_mark
         return None
 
-    def diphthong(self):
+    def diphthong(self): # คำควบกล้ำ
         regex = r"[^ห|ก-ร|ล|ว-ฮ][ร|ล|ว]"
         match = re.search(regex, self.word)
         if match is not None:
@@ -57,22 +57,26 @@ class split_component_of_word:
     def find_vowel(self):
         match = re.search(self.vowels_in_unicode, self.word)
         if match is not None:
-            del_tone_mark = self.word.replace(self.findtone_mark, '')
+            if self.find_tone_mark() is not None:
+                del_tone_mark = self.word.replace(self.find_tone_mark(), '')
+            else:
+                del_tone_mark = self.word
+
             if match.group() == 'เ':
-                for vowel in self.vowelsBeforeA :
-                    if re.search(vowel, self.word):
+                for vowel in self.vowels_before_A :
+                    if re.search(vowel, del_tone_mark):
                         return vowel.replace('[ก-ฮ]+', '')
             elif match.group() == 'แ':
                 for vowel in self.vowelsBeforeAe :
-                    if re.search(vowel, self.word):
+                    if re.search(vowel, del_tone_mark):
                         return vowel.replace('[ก-ฮ]+', '')
             elif match.group() == 'โ':
-                for vowel in self.vowelsBeforeO:
-                    if re.search(vowel, self.word):
+                for vowel in self.vowels_before_O:
+                    if re.search(vowel, del_tone_mark):
                         return vowel.replace('[ก-ฮ]+', '')
             elif match.group() == 'ั':
-                for vowel in self.vowelsBeforeUa:
-                    if re.search(vowel, self.word):
+                for vowel in self.vowels_before_Ua:
+                    if re.search(vowel, del_tone_mark):
                         return vowel.replace('[ก-ฮ]+', '')
             else:
                 return match.group()
@@ -80,8 +84,8 @@ class split_component_of_word:
             return None
 
     def findFinalConsonant(self): # spelling
-        if self.findtone_mark(self.word) is not None:
-            deltone_mark = re.sub(findtone_mark(self.word), '', self.word)
+        if self.find_tone_mark(self.word) is not None:
+            deltone_mark = re.sub(find_tone_mark(self.word), '', self.word)
         else:
             deltone_mark = self.word
         delFirstConsonant = re.sub(find_first_consonant(deltone_mark), '', deltone_mark)
@@ -95,7 +99,7 @@ word = input("ป้อนคำ 1 คำ : ")
 print(find_first_consonant(word))
 print(find_vowel(word))
 print(findFinalConsonant(word))
-print(findtone_mark(word))
+print(find_tone_mark(word))
 '''
 
 '''
