@@ -1,8 +1,5 @@
 import re
-'''
-middle_char = ['ก', 'จ', 'ฎ', 'ฏ', 'ด', 'ต', 'บ', 'ป', 'อ']
-high_char = ['ข', 'ฃ', 'ฉ', 'ฐ', 'ถ', 'ผ', 'ฝ', 'ศ', 'ษ', 'ส', 'ห']
-'''
+
 class split_component_of_word:
     def __init__(self, word):
         self.word = word

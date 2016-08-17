@@ -7,7 +7,7 @@ class SyllableTone(Enum):
     fourth = 4      # จัตวา
 
 class Consonant:
-    def __init__(self, _format=None, phonetic=None, tone=None):
+    def __init__(self, _format = None, phonetic = None, tone = None):
         self.format = _format # 'ฆ'
         self.phonetic = phonetic # 'ค'
         self.tone = tone
@@ -20,13 +20,13 @@ class Vowel:
 
 class Syllable:
     def __init__(self,
-            _format=None,
-            initial=None,
-            medial=None,
-            nucleus=None,
-            coda=None,
-            tone=None,
-            _type=None):
+            _format = None,
+            initial = None,
+            medial = None,
+            nucleus = None,
+            coda = None,
+            tone = None,
+            _type = None):
         '''
             สามัญ => ordinary => 0
         '''
@@ -47,7 +47,7 @@ class Syllable:
         return [self.nucleus, self.coda]
 
 class Word:
-    def __init__(self, _fomat=None, pronunciations=[]):
+    def __init__(self, _fomat = None, pronunciations = []):
         self.format = _format # 'การ'
         self.pronunciations = pronunciations # list of Syllable
 
