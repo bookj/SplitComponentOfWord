@@ -7,17 +7,10 @@ class SyllableTone(Enum):
     fourth = 4      # จัตวา
 
 class Consonant:
-    def __init__(self):
-        Kk = [ก ข ค ฆ]
-        Kd = [จ ด ต ถ ท ธ ฎ ฏ ฑ ฒ ช ซ ศ ษ ส]
-        Kb = [บ ป พ ภ ฟ]
-        Kng = []
-        Kn = []
-        Km
-
-        self.format = '' # 'ฆ'
-        self.phonetic = '' # 'ค'
-        self.tone = ''
+    def __init__(self, _format=None, phonetic=None, tone=None):
+        self.format = _format # 'ฆ'
+        self.phonetic = phonetic # 'ค'
+        self.tone = tone
 
 class Vowel:
     def __init__(self):
@@ -26,17 +19,24 @@ class Vowel:
 
 
 class Syllable:
-    def __init__(self):
+    def __init__(self,
+            _format=None,
+            initial=None,
+            medial=None,
+            nucleus=None,
+            coda=None,
+            tone=None,
+            _type=None):
         '''
             สามัญ => ordinary => 0
         '''
-        self.format = '' # 'การ'
-        self.initial = '' # 'ก'
-        self.medial = '' # None
-        self.nucleus = '' # 'อา'
-        self.coda = '' # 'ร'
-        self.tone = SyllableTone.ordinary # สามัญ
-        self.type = '' # คำเป็น คำตาย
+        self.format = _format # 'การ'
+        self.initial = initial # 'ก'
+        self.medial = medial # None
+        self.nucleus = nucleus # 'อา'
+        self.coda = coda # 'ร'
+        self.tone = tone # SyllableTone.ordinary # สามัญ
+        self.type = _type # คำเป็น คำตาย
 
     @property
     def onset(self):
@@ -47,15 +47,24 @@ class Syllable:
         return [self.nucleus, self.coda]
 
 class Word:
-    def __init__(self):
-        self.format = '' # 'การ'
-        self.pronunciation = [] # list of Syllable
+    def __init__(self, _fomat=None, pronunciations=[]):
+        self.format = _format # 'การ'
+        self.pronunciations = pronunciations # list of Syllable
+
+    def count_syllable(self):
+        return len(self.pronunciations)
 
 class Meter:
     def __init__(self):
         # วรรค
         self.format = '' # 'ถึงม้วยดินสิ้นฟ้ามหาสมุทร'
         self.words = []
+
+    def count(self):
+        return len(self.words)
+
+    def count_syllable(self):
+        return sum([word.count_syllable() for word in self.words])
 
 class Chapter:
     self __init__(self, meters=[]):
