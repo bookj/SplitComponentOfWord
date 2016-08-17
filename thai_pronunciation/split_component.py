@@ -6,19 +6,17 @@ high_char = ['ข', 'ฃ', 'ฉ', 'ฐ', 'ถ', 'ผ', 'ฝ', 'ศ', 'ษ', 'ส
 class split_component_of_word:
     def __init__(self, word):
         self.word = word
-        self.vowels_in_unicode = r"[\u0E30-\u0E39|\u0E40-\u0E45]"
         self.consonants_in_unicode = r"[ก-ร|ล|ว-ฮ]+"
-        self.tone_marks = ['่', '้', '๊', '๋']
         self.vowels_before_A = ['เ[ก-ฮ]+ียะ', 'เ[ก-ฮ]+ือะ', 'เ[ก-ฮ]+ีย', 'เ[ก-ฮ]+ือ', \
-                         'เ[ก-ฮ]+าะ', 'เ[ก-ฮ]+อะ' , 'เ[ก-ฮ]+อ' , 'เ[ก-ฮ]+า', \
-                         'เ[ก-ฮ]+ะ', 'เ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว เ-
-        self.vowels_before_Ae = ['แ[ก-ฮ]+ะ', 'แ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว แ-
-        self.vowels_before_O = ['โ[ก-ฮ]+ะ', 'โ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว โ-
-        self.vowels_before_Ua = ['[ก-ฮ]+ัวะ', '[ก-ฮ]+ัว', '[ก-ฮ]+ั'] # สระที่ขึ้นต้นด้วยตัว -ัว
-        # self.del_tone_mark = ''
+                                'เ[ก-ฮ]+าะ', 'เ[ก-ฮ]+อะ' , 'เ[ก-ฮ]+อ' , 'เ[ก-ฮ]+า', \
+                                'เ[ก-ฮ]+ะ', 'เ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว เอ
+        self.vowels_before_Ae = ['แ[ก-ฮ]+ะ', 'แ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว แอ
+        self.vowels_before_O = ['โ[ก-ฮ]+ะ', 'โ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว โอ
+        self.vowels_before_Ua = ['[ก-ฮ]+ัวะ', '[ก-ฮ]+ัว', '[ก-ฮ]+ั'] # สระที่ขึ้นต้นด้วยตัว อัว
 
     def find_tone_mark(self):
-        for tone_mark in self.tone_marks:
+        tone_marks = ['\u0E48', '\u0E49', '\u0E4A', '\u0E4B'] # เอก โท ตรี จัตวา
+        for tone_mark in tone_marks:
             if re.search(tone_mark, self.word):
                 return tone_mark
         return None
@@ -55,7 +53,8 @@ class split_component_of_word:
             return match.group()
 
     def find_vowel(self):
-        match = re.search(self.vowels_in_unicode, self.word)
+        vowels_in_unicode = r"[\u0E30-\u0E39|\u0E40-\u0E45]"
+        match = re.search(vowels_in_unicode, self.word)
         if match is not None:
             if self.find_tone_mark() is not None:
                 del_tone_mark = self.word.replace(self.find_tone_mark(), '')
@@ -65,21 +64,23 @@ class split_component_of_word:
             if match.group() == 'เ':
                 for vowel in self.vowels_before_A :
                     if re.search(vowel, del_tone_mark):
-                        return vowel.replace('[ก-ฮ]+', '')
+                        return vowel.replace('[ก-ฮ]+', 'อ')
             elif match.group() == 'แ':
                 for vowel in self.vowelsBeforeAe :
                     if re.search(vowel, del_tone_mark):
-                        return vowel.replace('[ก-ฮ]+', '')
+                        return vowel.replace('[ก-ฮ]+', 'อ')
             elif match.group() == 'โ':
                 for vowel in self.vowels_before_O:
                     if re.search(vowel, del_tone_mark):
-                        return vowel.replace('[ก-ฮ]+', '')
+                        return vowel.replace('[ก-ฮ]+', 'อ')
             elif match.group() == 'ั':
                 for vowel in self.vowels_before_Ua:
                     if re.search(vowel, del_tone_mark):
-                        return vowel.replace('[ก-ฮ]+', '')
+                        return vowel.replace('[ก-ฮ]+', 'อ')
+            elif match.group() == 'ใ' or match.group() == 'ไ' :
+                return match.group() + 'อ'
             else:
-                return match.group()
+                return 'อ' + match.group()
         else:
             return None
 
