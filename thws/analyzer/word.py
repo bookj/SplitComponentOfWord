@@ -8,15 +8,76 @@ class WordAnalyzer:
         # เช็ค พยัญชนะ สระ ตัวสะกด
         # text = 'การบ้าน'
         pronunciations = []
-
+        '''
         s1 = Syllable('การ',
-                initial = self.get_initial('การ'))
+                initial = self.get_initial('การ'),
+                medial = None,
+                nucleus = None,
+                coda = None,
+                tone = None,
+                _type = None)
         s2 = Syllable()
+        '''
         # check
         pronunciations.append(s1)
         pronunciations.append(s2)
 
         # return Word(text, pronunciations)
+
+    def get_initial(self, word):
+        consonants_in_unicode = r"[ก-ร|ล|ว-ฮ]"
+        match = re.search(consonants_in_unicode, self.word)
+        character = match.group()
+
+        if character in ['ก', 'ง', 'จ', 'ฉ', 'ซ', 'บ', 'ป', 'ผ', 'ฝ', 'ฟ', 'ม', 'ร', 'ว', 'ห', 'อ', 'ฮ']:
+            phonetic = character
+        elif character in ['ข', 'ฃ']:
+            phonetic = 'ข'
+        elif character in ['ค', 'ฅ', 'ฆ']:
+            phonetic = 'ค'
+        elif character in ['ช', 'ฌ']:
+            phonetic = 'ช'
+        elif character in ['ญ', 'ย']:
+            phonetic = 'ย'
+        elif character in ['ฎ', 'ด']:
+            phonetic = 'ด'
+        elif character in ['ฏ', 'ต']:
+            phonetic = 'ต'
+        elif character in ['ฑ', 'ฒ', 'ท', 'ธ']:
+            phonetic = 'ท'
+        elif character in ['ฐ', 'ถ']:
+            phonetic = 'ถ'
+        elif character in ['ณ', 'น']:
+            phonetic = 'น'
+        elif character in ['พ', 'ภ']:
+            phonetic = 'พ'
+        elif character in ['ล', 'ฬ']:
+            phonetic = 'ล'
+        elif character in ['ศ', 'ษ', 'ส']:
+            phonetic = 'ส'
+
+        if character in ['ก', 'จ', 'ฎ', 'ฏ', 'ด', 'ต', 'บ', 'ป', 'อ']:
+            tone = 
+        elif character in ['ข', 'ฃ', 'ฉ', 'ฐ', 'ถ', 'ผ', 'ฝ', 'ศ', 'ษ', 'ส', 'ห']:
+            tone =
+        elif character in ['ค', 'ฅ', 'ฆ', 'ช', 'ซ', 'ฌ', 'ฑ', 'ฒ', 'ท', 'ธ', 'พ', 'ฟ', 'ภ', 'ฮ']:
+            tone =
+        elif character in ['ง', 'ญ', 'ณ', 'น', 'ม', 'ย', 'ร', 'ล', 'ว', 'ฬ']:
+            tone =
+
+        return Consonant(_format, phonetic, tone)
+
+        return 'ก'
+
+    def get_medial(self, word):
+
+    def get_nucleus(self, word):
+        # สระเสียงสั้น หรือ รัสสระ (อ่านว่า รัด-สะ-สะ-หระ)
+        ['อะ', 'อิ', 'อึ', 'อุ', 'เอะ', 'แอะ', 'โอะ', 'เอาะ', 'เออะ', 'เอียะ', 'เอือะ', 'อัวะ', 'ฤ', 'ฦ', 'อำ', 'ใอ', 'ไอ', 'เอา']
+            return Vowel(vowel, 'short')
+        # สระเสียงยาว หรือ ทีฆสระ (อ่านว่า ที-คะ-สะ-หระ)
+        ['อา', 'อี', 'อือ', 'อู', 'เอ', 'แอ', 'โอ', 'ออ', 'เออ', 'เอีย', 'เอือ', 'อัว', 'ฤา', 'ฦา']
+            return Vowel(vowel, 'long')
 
     def get_coda(self, character):
         if character in ['ง']:
@@ -36,38 +97,28 @@ class WordAnalyzer:
         elif character in ['จ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'ฎ', 'ฏ', 'ฑ', 'ฒ', 'ช', 'ซ', 'ศ', 'ษ', 'ส']:
             return Consonant(character, 'ด')
 
-    def get_initial(self, word):
-        ['ก', 'ง', 'จ', 'ฉ', 'ซ', 'บ', 'ป', 'ผ', 'ฝ', 'ฟ', 'ม', 'ร', 'ว', 'ห', 'อ', 'ฮ']
-        ['ข', 'ฃ']
-        ['ค', 'ฅ', 'ฆ']
-        ['ช', 'ฌ']
-        ['ย', 'ญ']
-        ['ด', 'ฎ']
-        ['ต', 'ฏ']
-        ['ท', 'ธ', 'ฑ', 'ฒ']
-        ['ถ', 'ฐ']
-        ['น', 'ณ']
-        ['พ', 'ภ']
-        ['ล', 'ฬ']
-        ['ส', 'ศ', 'ษ']
+    def get_tone(self, word, ):
+        tone_marks = ['\u0E48', '\u0E49', '\u0E4A', '\u0E4B'] # เอก โท ตรี จัตวา
+        for index, tone_mark in enumerate(tone_marks, start=1):
+            if re.search(tone_mark, self.word):
+                return tone_mark
+        return None
+
+    def get_type(self, word):
+
+        '''
+        # มาตราตัวสะกด
+        kk = ['ก', 'ข', 'ค', 'ฆ']
+        kd = ['จ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'ฎ', 'ฏ', 'ฑ', 'ฒ', 'ช', 'ซ', 'ศ', 'ษ', 'ส']
+        kb = ['บ', 'ป', 'พ', 'ภ', 'ฟ']
+        kng = ['ง']
+        kn = ['น', 'ณ', 'ญ', 'ร', 'ล', 'ฬ']
+        km - ['ม']
+        ky = ['ย']
+        kw = ['ว']
 
         middle_character = ['ก', 'จ', 'ฎ', 'ฏ', 'ด', 'ต', 'บ', 'ป', 'อ']
         high_character = ['ข', 'ฃ', 'ฉ', 'ฐ', 'ถ', 'ผ', 'ฝ', 'ศ', 'ษ', 'ส', 'ห']
         pair_low_character = ['ค', 'ฅ', 'ฆ', 'ช', 'ซ', 'ฌ', 'ฑ', 'ฒ', 'ท', 'ธ', 'พ', 'ฟ', 'ภ', 'ฮ']
         single_low_character = ['ง', 'ญ', 'ณ', 'น', 'ม', 'ย', 'ร', 'ล', 'ว', 'ฬ']
-
-        return Consonant( _format, phonetic, tone)
-
-        return 'ก'
-
-    '''
-    # มาตราตัวสะกด
-    kk = ['ก', 'ข', 'ค', 'ฆ']
-    kd = ['จ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'ฎ', 'ฏ', 'ฑ', 'ฒ', 'ช', 'ซ', 'ศ', 'ษ', 'ส']
-    kb = ['บ', 'ป', 'พ', 'ภ', 'ฟ']
-    kng = ['ง']
-    kn = ['น', 'ณ', 'ญ', 'ร', 'ล', 'ฬ']
-    km - ['ม']
-    ky = ['ย']
-    kw = ['ว']
-    '''
+        '''
