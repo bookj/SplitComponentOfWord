@@ -26,7 +26,7 @@ export PRINT_HELP_PYSCRIPT
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
 # CONFIG
-PACKAGE_NAME := thai_pronunciation
+PACKAGE_NAME := thws
 
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)

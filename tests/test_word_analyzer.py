@@ -1,6 +1,6 @@
 import unittest
 
-from thai_pronunciation.split_component import split_component_of_word
+from thws.analyzer.word import WordAnalyzer
 
 class SplitToneMarkTest(unittest.TestCase):
 

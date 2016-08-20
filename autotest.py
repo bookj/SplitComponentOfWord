@@ -9,7 +9,7 @@ from watchdog.events import PatternMatchingEventHandler
 # STYLE="startswith_test"
 # STYLE="endswith_test"
 UNITEST_DIR = "tests" # ending without /
-PACKAGE_NAME = "thai_pronunciation"
+PACKAGE_NAME = "thws"
 STARTSWITH_TEST = True
 
 def process_filename_and_package_invert(file_path, os_name=None, startswith_test=True):

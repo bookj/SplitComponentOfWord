@@ -19,7 +19,7 @@ test_requirements = [
 ]
 
 setup(
-    name='thai_pronunciation',
+    name='thws',
     version='0.1.0',
     description="Python Boilerplate contains all the boilerplate you need to create a Python package.",
     long_description=readme + '\n\n',
@@ -27,20 +27,20 @@ setup(
     author_email='nattaponj@outlook.com',
     url='https://github.com/bookj/SplitComponentOfWord',
     packages=[
-        'thai_pronunciation',
+        'thws',
     ],
-    package_dir={'thai_pronunciation':
-                 'thai_pronunciation'},
+    package_dir={'thws':
+                 'thws'},
     entry_points={
         'console_scripts': [
-            'thai_pronunciation=thai_pronunciation.cli:main'
+            'thws=thws.cli:main'
         ]
     },
     include_package_data=True,
     install_requires=requirements,
     license="MIT license",
     zip_safe=False,
-    keywords='thai_pronunciation',
+    keywords='thws',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
