@@ -24,11 +24,54 @@ class WordAnalyzer:
 
         # return Word(text, pronunciations)
 
+
+    def get_diphthong(self): # คำควบกล้ำ
+        regex = r"[^ห|ก-ร|ล|ว-ฮ][ร|ล|ว]"
+        match = re.search(regex, self.word)
+        if match is not None:
+            return match.group().split()
+        return match
+
+    def get_ho_nam_onset(self): # ห นำ
+        regex = r"ห[ก-ฮ]"
+        match = re.search(regex, self.word)
+        if match is not None:
+            return match.group().split()
+        return match
+
+    def get_ao_yo_onset(self): # อย
+        match = re.search('อย', self.word)
+        if match is not None:
+            return match.group().split()
+        return match
+
+    def find_first_consonant(self):
+        if self.diphthong() is not None:
+            return self.diphthong()
+        elif self.consonants_before_H() is not None:
+            return self.consonants_before_H()
+        elif self.get_ao_yo_onset() is not None:
+            return self.get_ao_yo_onset()
+        else:
+            # match = re.search(self.consonants_in_unicode, self.word)
+            # return match.group()
+
+
     def get_initial(self, word):
         consonants_in_unicode = r"[ก-ร|ล|ว-ฮ]"
-        match = re.search(consonants_in_unicode, self.word)
-        character = match.group()
 
+        if self.get_diphthong() is not None:
+            character = self.get_diphthong()[0]
+        elif self.get_ao_yo_onset() is not None:
+            character = self.get_ao_yo_onset()[0]
+        elif self.get_ho_nam_onset() is not None:
+            character = self.get_ho_nam_onset()[0]
+        else:
+            match = re.search(consonants_in_unicode, self.word)
+            if match is not None:
+                character = match.group()
+
+        # Check เสียงของพยัญชนะต้น
         if character in ['ก', 'ง', 'จ', 'ฉ', 'ซ', 'บ', 'ป', 'ผ', 'ฝ', 'ฟ', 'ม', 'ร', 'ว', 'ห', 'อ', 'ฮ']:
             phonetic = character
         elif character in ['ข', 'ฃ']:
@@ -56,8 +99,9 @@ class WordAnalyzer:
         elif character in ['ศ', 'ษ', 'ส']:
             phonetic = 'ส'
 
+        # Check อักษรสูง กลาง ต่ำ
         if character in ['ก', 'จ', 'ฎ', 'ฏ', 'ด', 'ต', 'บ', 'ป', 'อ']:
-            tone = 
+            tone =
         elif character in ['ข', 'ฃ', 'ฉ', 'ฐ', 'ถ', 'ผ', 'ฝ', 'ศ', 'ษ', 'ส', 'ห']:
             tone =
         elif character in ['ค', 'ฅ', 'ฆ', 'ช', 'ซ', 'ฌ', 'ฑ', 'ฒ', 'ท', 'ธ', 'พ', 'ฟ', 'ภ', 'ฮ']:
@@ -67,9 +111,16 @@ class WordAnalyzer:
 
         return Consonant(_format, phonetic, tone)
 
-        return 'ก'
+        # return 'ก'
 
     def get_medial(self, word):
+        if self.get_diphthong() is not None:
+            character = self.get_diphthong()[1]
+        elif self.get_ao_yo_onset() is not None:
+            character = self.get_ao_yo_onset()[1]
+        elif self.get_ho_nam_onset() is not None:
+            character = self.get_ho_nam_onset()[1]
+        return None
 
     def get_nucleus(self, word):
         # สระเสียงสั้น หรือ รัสสระ (อ่านว่า รัด-สะ-สะ-หระ)

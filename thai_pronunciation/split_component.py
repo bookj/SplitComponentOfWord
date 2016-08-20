@@ -1,9 +1,5 @@
-import re
-
 class split_component_of_word:
     def __init__(self, word):
-        self.word = word
-        self.
         self.vowels_before_A = ['เ[ก-ฮ]+ียะ', 'เ[ก-ฮ]+ือะ', 'เ[ก-ฮ]+ีย', 'เ[ก-ฮ]+ือ', \
                                 'เ[ก-ฮ]+าะ', 'เ[ก-ฮ]+อะ' , 'เ[ก-ฮ]+อ' , 'เ[ก-ฮ]+า', \
                                 'เ[ก-ฮ]+ะ', 'เ[ก-ฮ]+'] # สระที่ขึ้นต้นด้วยตัว เอ
@@ -17,37 +13,6 @@ class split_component_of_word:
             if re.search(tone_mark, self.word):
                 return tone_mark
         return None
-
-    def diphthong(self): # คำควบกล้ำ
-        regex = r"[^ห|ก-ร|ล|ว-ฮ][ร|ล|ว]"
-        match = re.search(regex, self.word)
-        if match is not None:
-            return match.group()
-        return match
-
-    def consonants_before_H(self): # ห นำ
-        regex = r"ห[ก-ฮ]"
-        match = re.search(regex, self.word)
-        if match is not None:
-            return match.group()
-        return match
-
-    def consonants_before_OY(self): # อย
-        match = re.search('อย', self.word)
-        if match is not None:
-            return match.group()
-        return match
-
-    def find_first_consonant(self):
-        if self.diphthong() is not None:
-            return self.diphthong()
-        elif self.consonants_before_H() is not None:
-            return self.consonants_before_H()
-        elif self.consonants_before_OY() is not None:
-            return self.consonants_before_OY()
-        else:
-            # match = re.search(self.consonants_in_unicode, self.word)
-            # return match.group()
 
     def find_vowel(self):
         vowels_in_unicode = r"[\u0E30-\u0E39|\u0E40-\u0E45]"
@@ -91,15 +56,6 @@ class split_component_of_word:
         if finalConsonant == '' :
             return None
         return finalConsonant
-
-'''
-word = input("ป้อนคำ 1 คำ : ")
-print(find_first_consonant(word))
-print(find_vowel(word))
-print(findFinalConsonant(word))
-print(find_tone_mark(word))
-'''
-
 '''
 if __name__ == '__main__':
     input_data = input("Enter your expression: ")
