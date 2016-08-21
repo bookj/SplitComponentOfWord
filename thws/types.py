@@ -54,18 +54,18 @@ class Word:
     def count_syllable(self):
         return len(self.pronunciations)
 
-class Meter:
-    def __init__(self):
-        # วรรค
-        self.format = '' # 'ถึงม้วยดินสิ้นฟ้ามหาสมุทร'
-        self.words = []
-
-    def count(self):
-        return len(self.words)
-
-    def count_syllable(self):
-        return sum([word.count_syllable() for word in self.words])
-
-class Chapter:
-    self __init__(self, meters=[]):
-        self.meters = meters #
+# class Meter:
+#     def __init__(self):
+#         # วรรค
+#         self.format = '' # 'ถึงม้วยดินสิ้นฟ้ามหาสมุทร'
+#         self.words = []
+#
+#     def count(self):
+#         return len(self.words)
+#
+#     def count_syllable(self):
+#         return sum([word.count_syllable() for word in self.words])
+#
+# class Chapter:
+#     self __init__(self, meters=[]):
+#         self.meters = meters #
