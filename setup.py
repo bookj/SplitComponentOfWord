@@ -32,9 +32,9 @@ setup(
     package_dir={'thws':
                  'thws'},
     entry_points={
-        'console_scripts': [
-            'thws=thws.cli:main'
-        ]
+        # 'console_scripts': [
+        #     'thws=thws.cli:main'
+        # ]
     },
     include_package_data=True,
     install_requires=requirements,

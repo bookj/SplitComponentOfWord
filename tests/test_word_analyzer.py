@@ -1,14 +1,20 @@
 import unittest
 
 from thws.analyzer.word import WordAnalyzer
-# from ..thws.types import Consonant, Syllable
+from thws.types import Consonant, Syllable, ConsonantTone
 
 
 class WordAnalyzerTest(unittest.TestCase):
 
     def split_tone_mark_1_test(self):
-        assert WordAnalyzer().get_initial('กาว') == ['ก', 'ก', 1]
-        # assert WordAnalyzer().get_initial('กาว') == Consonant('ก', 'ก', 1)
+        wa = WordAnalyzer()
+        word = 'การ'
+        kan_consonant = Consonant('ก', 'ก', ConsonantTone.middle)
+        result = wa.get_initial(word)
+
+        self.assertEqual(result.format, kan_consonant.format)
+        self.assertEqual(result.phonetic, kan_consonant.phonetic)
+        self.assertEqual(result.tone, kan_consonant.tone)
 
 # class SplitFirstConsonantTest(unittest.TestCase):
 #

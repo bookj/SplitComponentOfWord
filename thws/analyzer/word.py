@@ -1,12 +1,7 @@
-# from ..types import Consonant, Syllable
+from ..types import *
 import re
 
 from enum import Enum
-class InitialTone(Enum):
-    middle = 0        # อักษรกลาง
-    high = 1          # อักษรสูง
-    pair_low = 2      # อักษรต่ำ (อักษรคู่)
-    single_low = 3    # อักษรต่ำ (อักษรเดี่ยว)
 
 class WordAnalyzer:
     def __init__(self):
@@ -99,17 +94,17 @@ class WordAnalyzer:
 
         # Check อักษรสูง กลาง ต่ำ
         if _format in ['ก', 'จ', 'ฎ', 'ฏ', 'ด', 'ต', 'บ', 'ป', 'อ']:
-            tone = InitialTone.high
+            tone = ConsonantTone.high
             # tone = 1
         elif _format in ['ข', 'ฃ', 'ฉ', 'ฐ', 'ถ', 'ผ', 'ฝ', 'ศ', 'ษ', 'ส', 'ห']:
-            tone = InitialTone.middle
+            tone = ConsonantTone.middle
         elif _format in ['ค', 'ฅ', 'ฆ', 'ช', 'ซ', 'ฌ', 'ฑ', 'ฒ', 'ท', 'ธ', 'พ', 'ฟ', 'ภ', 'ฮ']:
-            tone = InitialTone.pair_low
+            tone = ConsonantTone.pair_low
         elif _format in ['ง', 'ญ', 'ณ', 'น', 'ม', 'ย', 'ร', 'ล', 'ว', 'ฬ']:
-            tone = InitialTone.single_low
+            tone = ConsonantTone.single_low
 
-        return [_format, phonetic, tone]
-        # return Consonant(_format, phonetic, tone)
+        #return [_format, phonetic, tone]
+        return Consonant(_format, phonetic, tone)
         # return 'ก'
 
     def get_medial(self, word):

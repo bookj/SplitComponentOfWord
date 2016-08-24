@@ -6,6 +6,12 @@ class SyllableTone(Enum):
     third = 3       # ตรี
     fourth = 4      # จัตวา
 
+class ConsonantTone(Enum):
+    middle = 0        # อักษรกลาง
+    high = 1          # อักษรสูง
+    pair_low = 2      # อักษรต่ำ (อักษรคู่)
+    single_low = 3    # อักษรต่ำ (อักษรเดี่ยว)
+
 class Consonant:
     def __init__(self, _format = None, phonetic = None, tone = None):
         self.format = _format # 'ฆ'
