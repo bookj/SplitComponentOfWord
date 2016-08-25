@@ -93,17 +93,33 @@ class WordAnalyzer:
             phonetic = 'ส'
 
         # Check อักษรสูง กลาง ต่ำ
-        if _format in ['ก', 'จ', 'ฎ', 'ฏ', 'ด', 'ต', 'บ', 'ป', 'อ']:
-            tone = ConsonantTone.high
-            # tone = 1
-        elif _format in ['ข', 'ฃ', 'ฉ', 'ฐ', 'ถ', 'ผ', 'ฝ', 'ศ', 'ษ', 'ส', 'ห']:
-            tone = ConsonantTone.middle
-        elif _format in ['ค', 'ฅ', 'ฆ', 'ช', 'ซ', 'ฌ', 'ฑ', 'ฒ', 'ท', 'ธ', 'พ', 'ฟ', 'ภ', 'ฮ']:
-            tone = ConsonantTone.pair_low
-        elif _format in ['ง', 'ญ', 'ณ', 'น', 'ม', 'ย', 'ร', 'ล', 'ว', 'ฬ']:
-            tone = ConsonantTone.single_low
+        consonants = { "middle" : ['ก', 'จ', 'ฎ', 'ฏ', 'ด', 'ต', 'บ', 'ป', 'อ'], \
+        "high" : ['ข', 'ฃ', 'ฉ', 'ฐ', 'ถ', 'ผ', 'ฝ', 'ศ', 'ษ', 'ส', 'ห'], \
+        "pair_low" : ['ค', 'ฅ', 'ฆ', 'ช', 'ซ', 'ฌ', 'ฑ', 'ฒ', 'ท', 'ธ', 'พ', 'ฟ', 'ภ', 'ฮ'], \
+        "single_low" : ['ง', 'ญ', 'ณ', 'น', 'ม', 'ย', 'ร', 'ล', 'ว', 'ฬ']
+        }
 
-        #return [_format, phonetic, tone]
+        for key, value in consonants.items():
+            if _format in value:
+                if key == "middle":
+                    tone = ConsonantTone.middle
+                elif key == "high":
+                    tone = ConsonantTone.high
+                elif key == "pair_low":
+                    tone = ConsonantTone.pair_low
+                elif key == "single_low":
+                    tone = ConsonantTone.single_low
+
+        # if _format in :
+        #     tone = ConsonantTone.middle
+        #     # tone = 1
+        # elif _format in :
+        #     tone = ConsonantTone.high
+        # elif _format in :
+        #     tone = ConsonantTone.pair_low
+        # elif _format in :
+        #     tone = ConsonantTone.single_low
+
         return Consonant(_format, phonetic, tone)
         # return 'ก'
 
