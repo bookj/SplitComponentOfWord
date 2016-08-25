@@ -98,7 +98,6 @@ class WordAnalyzer:
         "pair_low" : ['ค', 'ฅ', 'ฆ', 'ช', 'ซ', 'ฌ', 'ฑ', 'ฒ', 'ท', 'ธ', 'พ', 'ฟ', 'ภ', 'ฮ'], \
         "single_low" : ['ง', 'ญ', 'ณ', 'น', 'ม', 'ย', 'ร', 'ล', 'ว', 'ฬ']
         }
-
         for key, value in consonants.items():
             if _format in value:
                 if key == "middle":
@@ -109,17 +108,6 @@ class WordAnalyzer:
                     tone = ConsonantTone.pair_low
                 elif key == "single_low":
                     tone = ConsonantTone.single_low
-
-        # if _format in :
-        #     tone = ConsonantTone.middle
-        #     # tone = 1
-        # elif _format in :
-        #     tone = ConsonantTone.high
-        # elif _format in :
-        #     tone = ConsonantTone.pair_low
-        # elif _format in :
-        #     tone = ConsonantTone.single_low
-
         return Consonant(_format, phonetic, tone)
         # return 'ก'
 
@@ -132,13 +120,56 @@ class WordAnalyzer:
             character = self.get_ho_nam_onset()[1]
         return None
 
-    # def get_nucleus(self, word):
-    #     # สระเสียงสั้น หรือ รัสสระ (อ่านว่า รัด-สะ-สะ-หระ)
-    #     ['อะ', 'อิ', 'อึ', 'อุ', 'เอะ', 'แอะ', 'โอะ', 'เอาะ', 'เออะ', 'เอียะ', 'เอือะ', 'อัวะ', 'ฤ', 'ฦ', 'อำ', 'ใอ', 'ไอ', 'เอา']
-    #         return Vowel(vowel, 'short')
-    #     # สระเสียงยาว หรือ ทีฆสระ (อ่านว่า ที-คะ-สะ-หระ)
-    #     ['อา', 'อี', 'อือ', 'อู', 'เอ', 'แอ', 'โอ', 'ออ', 'เออ', 'เอีย', 'เอือ', 'อัว', 'ฤา', 'ฦา']
-    #         return Vowel(vowel, 'long')
+    def find_vowel(self):
+        vowels = { \
+        "เ" : ['เ[ก-ฮ]+ียะ', 'เ[ก-ฮ]+ือะ', 'เ[ก-ฮ]+ีย', 'เ[ก-ฮ]+ือ', \
+                    'เ[ก-ฮ]+าะ', 'เ[ก-ฮ]+อะ' , 'เ[ก-ฮ]+อ' , 'เ[ก-ฮ]+า', \
+                    'เ[ก-ฮ]+ะ', 'เ[ก-ฮ]+'], # สระที่ขึ้นต้นด้วยตัว เอ
+        "แ" : ['แ[ก-ฮ]+ะ', 'แ[ก-ฮ]+'], # สระที่ขึ้นต้นด้วยตัว แอ
+        "โ" : ['โ[ก-ฮ]+ะ', 'โ[ก-ฮ]+'], # สระที่ขึ้นต้นด้วยตัว โอ
+        "\u0E" : ['[ก-ฮ]+ัวะ', '[ก-ฮ]+ัว', '[ก-ฮ]+ั'] # สระที่ขึ้นต้นด้วยตัว อัว
+        }
+        vowels_in_unicode = r"[\u0E30-\u0E39|\u0E40-\u0E45]"
+        match = re.search(vowels_in_unicode, self.word)
+        if match is not None:
+            if self.find_tone_mark() is not None:
+                del_tone_mark = self.word.replace(self.find_tone_mark(), '')
+            else:
+                del_tone_mark = self.word
+
+            if match.group() == 'เ':
+                for vowel in self.vowels_before_A :
+                    if re.search(vowel, del_tone_mark):
+                        return vowel.replace('[ก-ฮ]+', 'อ')
+            elif match.group() == 'แ':
+                for vowel in self.vowelsBeforeAe :
+                    if re.search(vowel, del_tone_mark):
+                        return vowel.replace('[ก-ฮ]+', 'อ')
+            elif match.group() == 'โ':
+                for vowel in self.vowels_before_O:
+                    if re.search(vowel, del_tone_mark):
+                        return vowel.replace('[ก-ฮ]+', 'อ')
+            elif match.group() == 'ั':
+                for vowel in self.vowels_before_Ua:
+                    if re.search(vowel, del_tone_mark):
+                        return vowel.replace('[ก-ฮ]+', 'อ')
+            elif match.group() == 'ใ' or match.group() == 'ไ' :
+                return match.group() + 'อ'
+            else:
+                return 'อ' + match.group()
+        else:
+            return None
+
+    def get_nucleus(self, word):
+        vowels = { \
+        # สระเสียงสั้น หรือ รัสสระ (อ่านว่า รัด-สะ-สะ-หระ)
+        # สระเสียงยาว หรือ ทีฆสระ (อ่านว่า ที-คะ-สะ-หระ)
+        "short" : ['อะ', 'อิ', 'อึ', 'อุ', 'เอะ', 'แอะ', 'โอะ', 'เอาะ', 'เออะ', 'เอียะ', 'เอือะ', 'อัวะ', 'ฤ', 'ฦ', 'อำ', 'ใอ', 'ไอ', 'เอา'], \
+        "long" : ['อา', 'อี', 'อือ', 'อู', 'เอ', 'แอ', 'โอ', 'ออ', 'เออ', 'เอีย', 'เอือ', 'อัว', 'ฤา', 'ฦา']
+        }
+        for key, value in vowels.items():
+            if self.find_vowel() in value:
+                return Vowel(self.find_vowel(), key)
 
     def get_coda(self, character):
         if character in ['ง']:
@@ -171,7 +202,6 @@ class WordAnalyzer:
     # input_data = input("Enter your expression: ")
 print(WordAnalyzer().get_initial('กาว'))
 
-
         # # มาตราตัวสะกด
         # kk = ['ก', 'ข', 'ค', 'ฆ']
         # kd = ['จ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'ฎ', 'ฏ', 'ฑ', 'ฒ', 'ช', 'ซ', 'ศ', 'ษ', 'ส']
@@ -181,8 +211,3 @@ print(WordAnalyzer().get_initial('กาว'))
         # km - ['ม']
         # ky = ['ย']
         # kw = ['ว']
-        #
-        # middle_character = ['ก', 'จ', 'ฎ', 'ฏ', 'ด', 'ต', 'บ', 'ป', 'อ']
-        # high_character = ['ข', 'ฃ', 'ฉ', 'ฐ', 'ถ', 'ผ', 'ฝ', 'ศ', 'ษ', 'ส', 'ห']
-        # pair_low_character = ['ค', 'ฅ', 'ฆ', 'ช', 'ซ', 'ฌ', 'ฑ', 'ฒ', 'ท', 'ธ', 'พ', 'ฟ', 'ภ', 'ฮ']
-        # single_low_character = ['ง', 'ญ', 'ณ', 'น', 'ม', 'ย', 'ร', 'ล', 'ว', 'ฬ']
