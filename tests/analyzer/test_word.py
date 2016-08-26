@@ -1,7 +1,8 @@
 import unittest
 
 from thws.analyzer.word import WordAnalyzer
-from thws.types import Consonant, Syllable, ConsonantTone
+# from thws.types import Consonant, Syllable, ConsonantTone
+from thws.types import *
 
 
 class WordAnalyzerTest(unittest.TestCase):
@@ -15,6 +16,24 @@ class WordAnalyzerTest(unittest.TestCase):
         self.assertEqual(result.format, kan_consonant.format)
         self.assertEqual(result.phonetic, kan_consonant.phonetic)
         self.assertEqual(result.tone, kan_consonant.tone)
+
+    def split_tone_mark_2_test(self):
+        wa = WordAnalyzer()
+        word = 'เมีย'
+        word_vowel = Vowel('เอีย', 'long')
+        result = wa.get_nucleus(word)
+
+        self.assertEqual(result.format, word_vowel.format)
+        self.assertEqual(result.type, word_vowel.type)
+
+    def split_tone_mark_3_test(self):
+        wa = WordAnalyzer()
+        word = 'โต๊ะ'
+        word_vowel = Vowel('โอะ', 'short')
+        result = wa.get_nucleus(word)
+
+        self.assertEqual(result.format, word_vowel.format)
+        self.assertEqual(result.type, word_vowel.type)
 
 # class SplitFirstConsonantTest(unittest.TestCase):
 #
