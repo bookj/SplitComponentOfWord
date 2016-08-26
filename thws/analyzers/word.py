@@ -108,8 +108,7 @@ class WordAnalyzer:
                     tone = ConsonantTone.pair_low
                 elif key == "single_low":
                     tone = ConsonantTone.single_low
-        return Consonant(_format, phonetic, tone)
-        # return 'ก'
+        return Consonant(_format, phonetic, tone) # return 'ก'
 
     def get_medial(self, word):
         if self.get_diphthong() is not None:
@@ -120,94 +119,92 @@ class WordAnalyzer:
             character = self.get_ho_nam_onset()[1]
         return None
 
-    def find_vowel(self):
+    def find_vowel(self, word):
         vowels = { \
         "เ" : ['เ[ก-ฮ]+ียะ', 'เ[ก-ฮ]+ือะ', 'เ[ก-ฮ]+ีย', 'เ[ก-ฮ]+ือ', \
                     'เ[ก-ฮ]+าะ', 'เ[ก-ฮ]+อะ' , 'เ[ก-ฮ]+อ' , 'เ[ก-ฮ]+า', \
                     'เ[ก-ฮ]+ะ', 'เ[ก-ฮ]+'], # สระที่ขึ้นต้นด้วยตัว เอ
         "แ" : ['แ[ก-ฮ]+ะ', 'แ[ก-ฮ]+'], # สระที่ขึ้นต้นด้วยตัว แอ
         "โ" : ['โ[ก-ฮ]+ะ', 'โ[ก-ฮ]+'], # สระที่ขึ้นต้นด้วยตัว โอ
-        "\u0E" : ['[ก-ฮ]+ัวะ', '[ก-ฮ]+ัว', '[ก-ฮ]+ั'] # สระที่ขึ้นต้นด้วยตัว อัว
+        "\u0E31" : ['[ก-ฮ]+ัวะ', '[ก-ฮ]+ัว', '[ก-ฮ]+ั'] # สระที่ขึ้นต้นด้วยตัว อัว
         }
         vowels_in_unicode = r"[\u0E30-\u0E39|\u0E40-\u0E45]"
-        match = re.search(vowels_in_unicode, self.word)
+        match = re.search(vowels_in_unicode, word)
         if match is not None:
-            if self.find_tone_mark() is not None:
-                del_tone_mark = self.word.replace(self.find_tone_mark(), '')
+            if self.get_tone(word) is not None:
+                del_tone_mark = word.replace(self.get_tone(word), '')
             else:
-                del_tone_mark = self.word
+                del_tone_mark = word
 
-            if match.group() == 'เ':
-                for vowel in self.vowels_before_A :
-                    if re.search(vowel, del_tone_mark):
-                        return vowel.replace('[ก-ฮ]+', 'อ')
-            elif match.group() == 'แ':
-                for vowel in self.vowelsBeforeAe :
-                    if re.search(vowel, del_tone_mark):
-                        return vowel.replace('[ก-ฮ]+', 'อ')
-            elif match.group() == 'โ':
-                for vowel in self.vowels_before_O:
-                    if re.search(vowel, del_tone_mark):
-                        return vowel.replace('[ก-ฮ]+', 'อ')
-            elif match.group() == 'ั':
-                for vowel in self.vowels_before_Ua:
-                    if re.search(vowel, del_tone_mark):
-                        return vowel.replace('[ก-ฮ]+', 'อ')
-            elif match.group() == 'ใ' or match.group() == 'ไ' :
+            if match.group() == 'ใ' or match.group() == 'ไ' :
                 return match.group() + 'อ'
-            else:
-                return 'อ' + match.group()
-        else:
-            return None
+
+            for key, value in vowels.items():
+                if match.group() == key:
+                    for vowel in value:
+                        if re.search(vowel, del_tone_mark):
+                            return vowel.replace('[ก-ฮ]+', 'อ')
+            return 'อ' + match.group()
+        return None
 
     def get_nucleus(self, word):
-        vowels = { \
         # สระเสียงสั้น หรือ รัสสระ (อ่านว่า รัด-สะ-สะ-หระ)
         # สระเสียงยาว หรือ ทีฆสระ (อ่านว่า ที-คะ-สะ-หระ)
+        vowels = { \
         "short" : ['อะ', 'อิ', 'อึ', 'อุ', 'เอะ', 'แอะ', 'โอะ', 'เอาะ', 'เออะ', 'เอียะ', 'เอือะ', 'อัวะ', 'ฤ', 'ฦ', 'อำ', 'ใอ', 'ไอ', 'เอา'], \
         "long" : ['อา', 'อี', 'อือ', 'อู', 'เอ', 'แอ', 'โอ', 'ออ', 'เออ', 'เอีย', 'เอือ', 'อัว', 'ฤา', 'ฦา']
         }
         for key, value in vowels.items():
-            if self.find_vowel() in value:
-                return Vowel(self.find_vowel(), key)
+            if self.find_vowel(word) in value:
+                return Vowel(self.find_vowel(word), key)
 
-    def get_coda(self, character):
-        if character in ['ง']:
-            return Consonant(character, 'ง')
-        elif character in ['ม']:
-            return Consonant(character, 'ม')
-        elif character in ['ย']:
-            return Consonant(character, 'ย')
-        elif character in ['ว']:
-            return Consonant(character, 'ว')
-        elif character in ['ก', 'ข', 'ค', 'ฆ']:
-            return Consonant(character, 'ก')
-        elif character in ['บ', 'ป', 'พ', 'ภ', 'ฟ']:
-            return Consonant(character, 'บ')
-        elif character in ['น', 'ณ', 'ญ', 'ร', 'ล', 'ฬ']:
-            return Consonant(character, 'น')
-        elif character in ['จ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'ฎ', 'ฏ', 'ฑ', 'ฒ', 'ช', 'ซ', 'ศ', 'ษ', 'ส']:
-            return Consonant(character, 'ด')
+    def find_final_consonant(self, word): # spelling
+        if self.get_tone(word) is not None:
+            del_tone_mark = re.sub(self.get_tone(word), '', word)
+        else:
+            del_tone_mark = word
+        _initial = self.get_initial(del_tone_mark)
+        del_first_consonant = re.sub(_initial.format, '', del_tone_mark)
+        # ลบ อ ออกจากสระ เช่น แอะ ==> แ-ะ
+        vowel_del_OO = re.sub('อ', '', self.find_vowel(word))
+        final_consonant = re.sub(vowel_del_OO, '', del_first_consonant)
+        if final_consonant == '' :
+            return None
+        return final_consonant
 
-    def get_tone(self, word, ):
-        tone_marks = ['\u0E48', '\u0E49', '\u0E4A', '\u0E4B'] # เอก โท ตรี จัตวา
+    # def get_coda(self, character):
+    def get_coda(self, word):
+        # มาตราตัวสะกด
+        codas = { \
+        'ก' : ['ก', 'ข', 'ค', 'ฆ'], \
+        'ด' : ['จ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'ฎ', 'ฏ', 'ฑ', 'ฒ', 'ช', 'ซ', 'ศ', 'ษ', 'ส'], \
+        'บ' : ['บ', 'ป', 'พ', 'ภ', 'ฟ'], \
+        'ง' : ['ง'], \
+        'น' : ['น', 'ณ', 'ญ', 'ร', 'ล', 'ฬ'], \
+        'ม' : ['ม'], \
+        'ย' : ['ย'], \
+        'ว' : ['ว']
+        }
+        character = self.find_final_consonant(word)
+        if character is not None:
+            for key, value in codas.items():
+                if character in value:
+                    return Consonant(character, key)
+
+    def get_tone(self, word):
+        tone_marks = ['\u0E48', '\u0E49', '\u0E4A', '\u0E4B'] # [รูป] เอก โท ตรี จัตวา
         for index, tone_mark in enumerate(tone_marks, start=1):
-            if re.search(tone_mark, self.word):
+            if re.search(tone_mark, word):
                 return tone_mark
         return None
 
     # def get_type(self, word):
+        # คำเป็น
+        #     คำประสมด้วยสระเสียงยาว ในแม่ ก กา รวมทั้งสระเสียงสั้น อำ ใอ ไอ เอา
+        #     เป็นคำที่มีตัวสะกดอยู่ในแม่กง กน กม เกย เกอว เช่น จง มั่น ชม เชย ดาวไพเป็น
+        # คำตาย
+        #     เป็นคำที่ผสมด้วยสระเสียงสั้นในแม่ ก กา เช่น จะ ปะ ทุ
+        #     เป็นคำที่มีตัวสะกดในแม่ กก กด กบ เช่น นัด พบ นก กระผม
 
 # if __name__ == '__main__':
     # input_data = input("Enter your expression: ")
-print(WordAnalyzer().get_initial('กาว'))
-
-        # # มาตราตัวสะกด
-        # kk = ['ก', 'ข', 'ค', 'ฆ']
-        # kd = ['จ', 'ด', 'ต', 'ถ', 'ท', 'ธ', 'ฎ', 'ฏ', 'ฑ', 'ฒ', 'ช', 'ซ', 'ศ', 'ษ', 'ส']
-        # kb = ['บ', 'ป', 'พ', 'ภ', 'ฟ']
-        # kng = ['ง']
-        # kn = ['น', 'ณ', 'ญ', 'ร', 'ล', 'ฬ']
-        # km - ['ม']
-        # ky = ['ย']
-        # kw = ['ว']
