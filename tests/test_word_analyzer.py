@@ -1,6 +1,6 @@
 import unittest
 
-from thws.analyzer.word import WordAnalyzer
+from thws.analyzers.word import WordAnalyzer
 from thws.types import Consonant, Syllable, ConsonantTone
 
 
