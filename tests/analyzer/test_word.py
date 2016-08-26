@@ -35,6 +35,24 @@ class WordAnalyzerTest(unittest.TestCase):
         self.assertEqual(result.format, word_vowel.format)
         self.assertEqual(result.type, word_vowel.type)
 
+    def split_tone_mark_4_test(self):
+        wa = WordAnalyzer()
+        word = 'เสียง'
+        final_consonant = Consonant('ง', 'ง')
+        result = wa.get_coda(word)
+
+        self.assertEqual(result.format, final_consonant.format)
+        self.assertEqual(result.phonetic, final_consonant.phonetic)
+
+    def split_tone_mark_5_test(self):
+        wa = WordAnalyzer()
+        word = 'ภาพ'
+        final_consonant = Consonant('พ', 'บ')
+        result = wa.get_coda(word)
+
+        self.assertEqual(result.format, final_consonant.format)
+        self.assertEqual(result.phonetic, final_consonant.phonetic)
+
 # class SplitFirstConsonantTest(unittest.TestCase):
 #
 #     def split_first_consonant_1_test(self):

@@ -158,7 +158,22 @@ class WordAnalyzer:
             if self.find_vowel(word) in value:
                 return Vowel(self.find_vowel(word), key)
 
-    def get_coda(self, character):
+    def find_final_consonant(self, word): # spelling
+        if self.get_tone(word) is not None:
+            del_tone_mark = re.sub(self.get_tone(word), '', word)
+        else:
+            del_tone_mark = word
+        _initial = self.get_initial(del_tone_mark)
+        del_first_consonant = re.sub(_initial.format, '', del_tone_mark)
+        # ลบ อ ออกจากสระ เช่น แอะ ==> แ-ะ
+        vowel_del_OO = re.sub('อ', '', self.find_vowel(word))
+        final_consonant = re.sub(vowel_del_OO, '', del_first_consonant)
+        if final_consonant == '' :
+            return None
+        return final_consonant
+
+    # def get_coda(self, character):
+    def get_coda(self, word):
         # มาตราตัวสะกด
         codas = { \
         'ก' : ['ก', 'ข', 'ค', 'ฆ'], \
@@ -170,9 +185,11 @@ class WordAnalyzer:
         'ย' : ['ย'], \
         'ว' : ['ว']
         }
-        for key, value in vowels.items():
-            if character in value:
-                return Consonant(character, key)
+        character = self.find_final_consonant(word)
+        if character is not None:
+            for key, value in codas.items():
+                if character in value:
+                    return Consonant(character, key)
 
     def get_tone(self, word):
         tone_marks = ['\u0E48', '\u0E49', '\u0E4A', '\u0E4B'] # [รูป] เอก โท ตรี จัตวา
@@ -180,18 +197,6 @@ class WordAnalyzer:
             if re.search(tone_mark, word):
                 return tone_mark
         return None
-
-    def findFinalConsonant(self): # spelling
-        if self.find_tone_mark(self.word) is not None:
-            deltone_mark = re.sub(find_tone_mark(self.word), '', self.word)
-        else:
-            deltone_mark = self.word
-        delFirstConsonant = re.sub(find_first_consonant(deltone_mark), '', deltone_mark)
-        finalConsonant = re.sub(find_vowel(self.word), '', delFirstConsonant)
-        if finalConsonant == '' :
-            return None
-        return finalConsonant
-
 
     # def get_type(self, word):
         # คำเป็น

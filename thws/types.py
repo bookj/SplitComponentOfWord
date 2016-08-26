@@ -20,11 +20,8 @@ class Consonant:
 
 class Vowel:
     def __init__(self, _format = None, _type = None):
-        # self.format = ''
-        # self.type = ''
         self.format = _format # 'อะ' 'อา'
         self.type = _type
-
 
 class Syllable:
     def __init__(self,
