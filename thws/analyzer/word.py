@@ -190,6 +190,7 @@ class WordAnalyzer:
             for key, value in codas.items():
                 if character in value:
                     return Consonant(character, key)
+        return Consonant();
 
     def get_tone(self, word):
         tone_marks = ['\u0E48', '\u0E49', '\u0E4A', '\u0E4B'] # [รูป] เอก โท ตรี จัตวา
@@ -198,13 +199,16 @@ class WordAnalyzer:
                 return tone_mark
         return None
 
-    # def get_type(self, word):
+    def get_type(self, nucleus, coda):
+        types = {\
+        "คำเป็น" : [่'ง', 'น', 'ม', 'ย', 'ว'],
+        "คำตาย" : ['ก', 'ด', 'บ']
+        }
+        if nucleus.type == 'long' 
+
         # คำเป็น
         #     คำประสมด้วยสระเสียงยาว ในแม่ ก กา รวมทั้งสระเสียงสั้น อำ ใอ ไอ เอา
         #     เป็นคำที่มีตัวสะกดอยู่ในแม่กง กน กม เกย เกอว เช่น จง มั่น ชม เชย ดาวไพเป็น
         # คำตาย
         #     เป็นคำที่ผสมด้วยสระเสียงสั้นในแม่ ก กา เช่น จะ ปะ ทุ
         #     เป็นคำที่มีตัวสะกดในแม่ กก กด กบ เช่น นัด พบ นก กระผม
-
-# if __name__ == '__main__':
-    # input_data = input("Enter your expression: ")

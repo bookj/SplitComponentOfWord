@@ -35,21 +35,29 @@ class Syllable:
         '''
             สามัญ => ordinary => 0
         '''
-        self.format = _format # 'การ'
-        self.initial = initial # 'ก'
-        self.medial = medial # None
-        self.nucleus = nucleus # 'อา'
-        self.coda = coda # 'ร'
-        self.tone = tone # SyllableTone.ordinary # สามัญ
-        self.type = _type # คำเป็น คำตาย
+        # self.format = _format # 'การ'
+        # self.initial = initial # 'ก'
+        # self.medial = medial # None
+        # self.nucleus = nucleus # 'อา'
+        # self.coda = coda # 'ร'
+        # self.tone = tone # SyllableTone.ordinary # สามัญ
+        # self.type = _type # คำเป็น คำตาย
+        self.format = _format                   # 'การ'
+        self.initial = get_initial(_format)     # 'ก'
+        self.medial = get_medial(_format)       # None
+        self.nucleus = get_nucleus(_format)     # 'อา'
+        self.coda = get_coda(_format)           # 'ร'
+        self.type = get_type(nucleus, coda)     # คำเป็น คำตาย
+        self.tone = tone                        # SyllableTone.ordinary # สามัญ
+
 
     @property
     def onset(self):
-        return [self.initial, self.medial]
+        return self.initial, self.medial
 
     @property
     def rime(self):
-        return [self.nucleus, self.coda]
+        return self.nucleus, self.coda
 
 class Word:
     def __init__(self, _fomat = None, pronunciations = []):
