@@ -50,7 +50,6 @@ class Syllable:
         self.type = get_type(nucleus, coda)     # คำเป็น คำตาย
         self.tone = tone                        # SyllableTone.ordinary # สามัญ
 
-
     @property
     def onset(self):
         return self.initial, self.medial
