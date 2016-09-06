@@ -137,7 +137,7 @@ class WordAnalyzer:
         "เอะ" : ['เ[ก-ฮ]+็'],
         # เช่น แข็ง
         "แอะ" : ['แ[ก-ฮ]+็'],
-        "เอาะ" : ['[ก-ฮ]+็อ', '\u0E47']
+        "เอาะ" : ['[ก-ฮ]+็อ']
         }
 
         # มียกเว้นอยู่คำหนึ่ง  ก + เอาะ +  -้  =  ก็   ซึ่งก็มีอยู่เพียงคำเดียวเท่านี้เอง
@@ -150,7 +150,7 @@ class WordAnalyzer:
         else:
             del_tone_mark = word
 
-        print(del_tone_mark)
+        # print(del_tone_mark)
 
         if len(del_tone_mark) == 2:
             if re.search('[ก-ฮ]ร', del_tone_mark) is not None:
@@ -167,7 +167,7 @@ class WordAnalyzer:
 
         vowels_in_unicode = r"[\u0E30-\u0E39|\u0E40-\u0E45]"
         match = re.search(vowels_in_unicode, del_tone_mark)
-        print(match)
+        # print(match)
         if match is not None:
             if match.group() == 'ใ' or match.group() == 'ไ' :
                 return match.group() + 'อ'
@@ -183,7 +183,8 @@ class WordAnalyzer:
             for key, value in transform_vowels.items():
                 for el in value:
                     if re.search(el, del_tone_mark) is not None:
-                        # print(re.search(el, del_tone_mark))
+                        print(key)
+                        print(re.search(el, del_tone_mark))
                         return key
 
             return 'อ' + match.group()
