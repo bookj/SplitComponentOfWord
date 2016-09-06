@@ -123,44 +123,69 @@ class WordAnalyzer:
         vowels = { \
         "เ" : ['เ[ก-ฮ]+ียะ', 'เ[ก-ฮ]+ือะ', 'เ[ก-ฮ]+ีย', 'เ[ก-ฮ]+ือ', \
                     'เ[ก-ฮ]+าะ', 'เ[ก-ฮ]+อะ' , 'เ[ก-ฮ]+อ' , 'เ[ก-ฮ]+า', \
-                    'เ[ก-ฮ]+ะ', 'เ[ก-ฮ]+'], # สระที่ขึ้นต้นด้วยตัว เอ
+                    'เ[ก-ฮ]+ะ'], # สระที่ขึ้นต้นด้วยตัว เอ
         "แ" : ['แ[ก-ฮ]+ะ', 'แ[ก-ฮ]+'], # สระที่ขึ้นต้นด้วยตัว แอ
         "โ" : ['โ[ก-ฮ]+ะ', 'โ[ก-ฮ]+'], # สระที่ขึ้นต้นด้วยตัว โอ
         # "\u0E31" : ['[ก-ฮ]+ัวะ', '[ก-ฮ]+ัว', '[ก-ฮ]+ั'] # สระที่ขึ้นต้นด้วยตัว ไม้หันอากาศ
         "\u0E31" : ['[ก-ฮ]+ัวะ', '[ก-ฮ]+ัว']
         }
-        # ref : https://www.gotoknow.org/posts/484204.gsappid
-        transform_vowels = {\
-        "อะ" : '\u0E31', \
-        # เช่น เด็ก
-        "เอะ" : 'เ ็',\
-        # เช่น แข็ง
-        "แอะ" : 'แ ็',\
-        # เช่น ขน
-        # มีตัวยกเว้นอยู่ตัวหนึ่งคือ ร ซึ่งใช้เป็นตัวสะกดเฉพาะของสระ ออ ลดรูป เช่น จร มรณ พร ศร
-        # นอกนั้นถ้าไม่ใช่ ร สะกดถือว่ามาจาก โอะ ลดรูปทั้งนั้น
-        "โอะ" : '',\
-        # เช่น จร, กร
-        "ออ" : ,\
-        "เอาะ" : ['น็อ', '\u0E47'],\
-        , '[ก-ฮ]+ั'
-        }
-        vowels_in_unicode = r"[\u0E30-\u0E39|\u0E40-\u0E45]"
-        match = re.search(vowels_in_unicode, word)
-        if match is not None:
-            if self.get_tone(word) is not None:
-                del_tone_mark = word.replace(self.get_tone(word), '')
-            else:
-                del_tone_mark = word
 
+        # ref : https://www.gotoknow.org/posts/484204.gsappid
+        transform_vowels = { \
+        "อะ" : ['[ก-ฮ]+ั'],
+        # เช่น เด็ก
+        "เอะ" : ['เ[ก-ฮ]+็'],
+        # เช่น แข็ง
+        "แอะ" : ['แ[ก-ฮ]+็'],
+        "เอาะ" : ['[ก-ฮ]+็อ', '\u0E47']
+        }
+
+        # มียกเว้นอยู่คำหนึ่ง  ก + เอาะ +  -้  =  ก็   ซึ่งก็มีอยู่เพียงคำเดียวเท่านี้เอง
+        if word == 'ก็':
+            return 'เอาะ'
+
+        # ลบ วรรณยุกต์ ออกก่อน
+        if self.get_tone(word) is not None:
+            del_tone_mark = word.replace(self.get_tone(word), '')
+        else:
+            del_tone_mark = word
+
+        print(del_tone_mark)
+
+        if len(del_tone_mark) == 2:
+            if re.search('[ก-ฮ]ร', del_tone_mark) is not None:
+                return 'ออ'
+                # เช่น จร, กร
+            else:
+                return 'โอะ'
+                # เช่น ขน
+                # มีตัวยกเว้นอยู่ตัวหนึ่งคือ ร ซึ่งใช้เป็นตัวสะกดเฉพาะของสระ ออ ลดรูป เช่น จร มรณ พร ศร
+                # นอกนั้นถ้าไม่ใช่ ร สะกดถือว่ามาจาก โอะ ลดรูปทั้งนั้น
+
+        if re.search('[ก-ฮ]+ว[ก-ฮ]', del_tone_mark):
+            return 'อัว'
+
+        vowels_in_unicode = r"[\u0E30-\u0E39|\u0E40-\u0E45]"
+        match = re.search(vowels_in_unicode, del_tone_mark)
+        print(match)
+        if match is not None:
             if match.group() == 'ใ' or match.group() == 'ไ' :
                 return match.group() + 'อ'
 
             for key, value in vowels.items():
                 if match.group() == key:
+                    # print('Do ' + match.group())
                     for vowel in value:
                         if re.search(vowel, del_tone_mark):
+                            # print(re.search(vowel, del_tone_mark))
                             return vowel.replace('[ก-ฮ]+', 'อ')
+
+            for key, value in transform_vowels.items():
+                for el in value:
+                    if re.search(el, del_tone_mark) is not None:
+                        # print(re.search(el, del_tone_mark))
+                        return key
+
             return 'อ' + match.group()
         return None
 
@@ -216,12 +241,12 @@ class WordAnalyzer:
                 return tone_mark
         return None
 
-    def get_type(self, nucleus, coda):
-        types = {\
-        "คำเป็น" : [่'ง', 'น', 'ม', 'ย', 'ว'],
-        "คำตาย" : ['ก', 'ด', 'บ']
-        }
-        if nucleus.type == 'long'
+    # def get_type(self, nucleus, coda):
+    #     types = {\
+    #     "คำเป็น" : [่'ง', 'น', 'ม', 'ย', 'ว'],
+    #     "คำตาย" : ['ก', 'ด', 'บ']
+    #     }
+    #     if nucleus.type == 'long'
 
         # คำเป็น
         #     คำประสมด้วยสระเสียงยาว ในแม่ ก กา รวมทั้งสระเสียงสั้น อำ ใอ ไอ เอา
